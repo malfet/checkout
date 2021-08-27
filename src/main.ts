@@ -4,6 +4,7 @@ import * as gitSourceProvider from './git-source-provider'
 import * as inputHelper from './input-helper'
 import * as path from 'path'
 import * as stateHelper from './state-helper'
+import * as retryHelper from './retry-helper'
 
 async function run(): Promise<void> {
   try {
@@ -17,8 +18,10 @@ async function run(): Promise<void> {
         path.join(__dirname, 'problem-matcher.json')
       )
 
-      // Get sources
-      await gitSourceProvider.getSource(sourceSettings)
+      // Get sources with retry
+      await retryHelper.execute(async () => {
+        await gitSourceProvider.getSource(sourceSettings)
+      })
     } finally {
       // Unregister problem matcher
       coreCommand.issueCommand('remove-matcher', {owner: 'checkout-git'}, '')
