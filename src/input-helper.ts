@@ -130,5 +130,9 @@ export async function getInputs(): Promise<IGitSourceSettings> {
   result.githubServerUrl = core.getInput('github-server-url')
   core.debug(`GitHub Host URL = ${result.githubServerUrl}`)
 
+  // Pass `--quiet` to checkout
+  result.quietCheckout =
+    (core.getInput('quiet-checkout') || 'false').toUpperCase() === 'TRUE'
+
   return result
 }

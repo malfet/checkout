@@ -261,7 +261,7 @@ export async function cleanup(repositoryPath: string): Promise<void> {
 
   let git: IGitCommandManager
   try {
-    git = await gitCommandManager.createCommandManager(repositoryPath, false)
+    git = await gitCommandManager.createCommandManager(repositoryPath, false, false)
   } catch {
     return
   }
@@ -297,7 +297,8 @@ async function getGitCommandManager(
   try {
     return await gitCommandManager.createCommandManager(
       settings.repositoryPath,
-      settings.lfs
+      settings.lfs,
+      settings.quietCheckout
     )
   } catch (err) {
     // Git is required for LFS
