@@ -51,9 +51,10 @@ export interface IGitCommandManager {
 
 export async function createCommandManager(
   workingDirectory: string,
-  lfs: boolean
+  lfs: boolean,
+  quietCheckout: boolean
 ): Promise<IGitCommandManager> {
-  return await GitCommandManager.createCommandManager(workingDirectory, lfs)
+  return await GitCommandManager.createCommandManager(workingDirectory, lfs, quietCheckout)
 }
 
 class GitCommandManager {
@@ -63,6 +64,7 @@ class GitCommandManager {
   }
   private gitPath = ''
   private lfs = false
+  private quietCheckout = false
   private workingDirectory = ''
 
   // Private constructor; use createCommandManager()
@@ -123,7 +125,7 @@ class GitCommandManager {
   }
 
   async checkout(ref: string, startPoint: string): Promise<void> {
-    const args = ['checkout', '--progress', '--force']
+    const args = ['checkout', this.quietCheckout ? '--quiet' : '--progress', '--force']
     if (startPoint) {
       args.push('-B', ref, startPoint)
     } else {
@@ -176,7 +178,7 @@ class GitCommandManager {
       args.push('--no-tags')
     }
 
-    args.push('--prune', '--progress', '--no-recurse-submodules')
+    args.push('--prune', this.quietCheckout ? '--quiet' : '--progress', '--no-recurse-submodules')
     if (fetchDepth && fetchDepth > 0) {
       args.push(`--depth=${fetchDepth}`)
     } else if (
@@ -385,10 +387,11 @@ class GitCommandManager {
 
   static async createCommandManager(
     workingDirectory: string,
-    lfs: boolean
+    lfs: boolean,
+    quietCheckout: boolean
   ): Promise<GitCommandManager> {
     const result = new GitCommandManager()
-    await result.initializeCommandManager(workingDirectory, lfs)
+    await result.initializeCommandManager(workingDirectory, lfs, quietCheckout)
     return result
   }
 
@@ -430,7 +433,8 @@ class GitCommandManager {
 
   private async initializeCommandManager(
     workingDirectory: string,
-    lfs: boolean
+    lfs: boolean,
+    quietCheckout: boolean
   ): Promise<void> {
     this.workingDirectory = workingDirectory
 
@@ -440,6 +444,8 @@ class GitCommandManager {
     if (!this.lfs) {
       this.gitEnv['GIT_LFS_SKIP_SMUDGE'] = '1'
     }
+
+    this.quietCheckout = quietCheckout
 
     this.gitPath = await io.which('git', true)
 

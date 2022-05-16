@@ -125,5 +125,9 @@ export async function getInputs(): Promise<IGitSourceSettings> {
   // Set safe.directory in git global config.
   result.setSafeDirectory =
     (core.getInput('set-safe-directory') || 'true').toUpperCase() === 'TRUE'
+
+  // Pass `--quiet` to checkout
+  result.quietCheckout =
+    (core.getInput('quiet-checkout') || 'false').toUpperCase() === 'TRUE'
   return result
 }

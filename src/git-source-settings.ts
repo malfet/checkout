@@ -83,4 +83,9 @@ export interface IGitSourceSettings {
    * Indicates whether to add repositoryPath as safe.directory in git global config
    */
   setSafeDirectory: boolean
+
+  /**
+   * Check out quietly
+   */
+  quietCheckout: boolean
 }
