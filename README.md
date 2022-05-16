@@ -97,6 +97,10 @@ When Git 2.18 or higher is not in your PATH, falls back to the REST API to downl
     # config --global --add safe.directory <path>`
     # Default: true
     set-safe-directory: ''
+
+    # Pass `--quiet` option to `git clone`
+    # Default: false
+    quiet-checkout: ''
 ```
 <!-- end usage -->
 
