@@ -647,7 +647,7 @@ class GitCommandManager {
             }
             args.push('--prune', '--progress', '--no-recurse-submodules');
             if (this.quietCheckout) {
-                args.push('--quite');
+                args.push('--quiet');
             }
             if (options.filter) {
                 args.push(`--filter=${options.filter}`);
