@@ -43,6 +43,7 @@ describe('git-auth-helper tests', () => {
     git = await commandManager.createCommandManager(
       workingDirectory,
       lfs,
+      false,
       doSparseCheckout
     )
 
@@ -79,6 +80,7 @@ describe('git-auth-helper tests', () => {
     git = await commandManager.createCommandManager(
       workingDirectory,
       lfs,
+      false,
       doSparseCheckout
     )
 
